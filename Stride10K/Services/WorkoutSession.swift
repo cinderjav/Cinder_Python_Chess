@@ -276,7 +276,7 @@ final class WorkoutSession {
 
     private func startPedometer(from start: Date) {
         guard CMPedometer.isStepCountingAvailable() else { return }
-        pedometer.startUpdates(from: start) { [weak self] data, _ in
+        pedometer.startUpdates(from: start) { @Sendable [weak self] data, _ in
             guard let data, let self else { return }
             let steps = data.numberOfSteps.intValue
             let distance = data.distance?.doubleValue ?? 0

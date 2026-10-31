@@ -91,7 +91,7 @@ final class HealthService {
 
         try await Self.perform { builder.endCollection(withEnd: end, completion: $0) }
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            builder.finishWorkout { _, error in
+            builder.finishWorkout { @Sendable _, error in
                 if let error {
                     continuation.resume(throwing: error)
                 } else {

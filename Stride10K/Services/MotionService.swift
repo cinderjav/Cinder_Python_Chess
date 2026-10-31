@@ -36,7 +36,7 @@ final class MotionService {
         guard liveDayStart != dayStart else { return }
         pedometer.stopUpdates()
         liveDayStart = dayStart
-        pedometer.startUpdates(from: dayStart) { [weak self] data, _ in
+        pedometer.startUpdates(from: dayStart) { @Sendable [weak self] data, _ in
             guard let data, let self else { return }
             let steps = data.numberOfSteps.intValue
             let distance = data.distance?.doubleValue ?? 0
@@ -78,7 +78,7 @@ final class MotionService {
         let start = Calendar.current.startOfDay(for: now)
         let manager = activityManager
         let samples: [MotionSample] = await withCheckedContinuation { continuation in
-            manager.queryActivityStarting(from: start, to: now, to: .main) { activities, _ in
+            manager.queryActivityStarting(from: start, to: now, to: .main) { @Sendable activities, _ in
                 let samples = (activities ?? []).map { activity -> MotionSample in
                     let kind: MotionSample.Kind
                     if activity.confidence == .low {
@@ -101,7 +101,7 @@ final class MotionService {
     private func steps(from start: Date, to end: Date) async -> Int {
         let pedometer = self.pedometer
         return await withCheckedContinuation { continuation in
-            pedometer.queryPedometerData(from: start, to: end) { data, _ in
+            pedometer.queryPedometerData(from: start, to: end) { @Sendable data, _ in
                 continuation.resume(returning: data?.numberOfSteps.intValue ?? 0)
             }
         }
