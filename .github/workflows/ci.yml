@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  trainingkit-linux:
+    name: TrainingKit tests (Linux)
+    runs-on: ubuntu-latest
+    container: swift:6.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: swift test
+        working-directory: TrainingKit
+        run: swift test
+
+  ios-app:
+    name: Build iOS app
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode version
+        run: xcodebuild -version
+
+      - name: TrainingKit tests (macOS)
+        working-directory: TrainingKit
+        run: swift test
+
+      - name: Build for iOS Simulator
+        run: |
+          xcodebuild build \
+            -project Stride10K.xcodeproj \
+            -scheme Stride10K \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO > build.log 2>&1 || {
+              echo "::group::Errors"
+              grep -E "error:" build.log | sort -u | head -100
+              echo "::endgroup::"
+              tail -80 build.log
+              exit 1
+            }
+          echo "Build succeeded. Warnings:"
+          grep -E "warning:" build.log | grep -v "appintentsmetadataprocessor" | sort -u | head -100 || true

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Stride reads your steps and walking + running distance to show your progress toward your daily step goal.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Stride saves your walks and runs to Apple Health as workouts.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Stride uses Motion &amp; Fitness data to count your steps live and to tell walking time from running time.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Stride uses GPS during workouts to measure your distance and pace, including while your screen is locked.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>location</string>
+	</array>
+</dict>
+</plist>
